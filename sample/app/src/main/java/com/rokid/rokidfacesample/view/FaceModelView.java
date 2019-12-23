@@ -16,7 +16,11 @@ import android.view.View;
 
 import com.rokid.facelib.model.FaceDO;
 import com.rokid.facelib.model.FaceModel;
+import com.rokid.facelib.utils.FaceBitmapUtils;
+import com.rokid.facelib.utils.FaceFileUtils;
 import com.rokid.rokidfacesample.userdb.UserInfoDao;
+
+import java.io.File;
 
 
 public class FaceModelView extends View {
@@ -24,6 +28,7 @@ public class FaceModelView extends View {
     private Paint paint;
     private Paint textPaint;
     private UserInfoDao userInfoDao;
+    private static final String STORE_PATH = "/sdcard/store/";
 
     public FaceModelView(Context context) {
         this(context,null);
@@ -45,6 +50,10 @@ public class FaceModelView extends View {
         paint.setStrokeCap(Paint.Cap.ROUND);
         paint.setAntiAlias(true);
 
+        File file = new File(STORE_PATH);
+        if(!file.exists()){
+            file.mkdirs();
+        }
         ValueAnimator paintAnim = ValueAnimator.ofFloat(0f, 1f,0f);
         paintAnim.setDuration(1000);
         paintAnim.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
@@ -96,7 +105,15 @@ public class FaceModelView extends View {
 
 
     private Paint paintResult;
+    private int preFaceId = -1;
+    private int times;
     private void drawResult(Canvas canvas, Rect rect, FaceDO face) {
+        //做id去重
+        if(face.trackId != preFaceId){
+            FaceFileUtils.saveBitmap(face.recogBitmap,STORE_PATH+(times++)+".png");
+            preFaceId = face.trackId;
+        }
+
         canvas.save();
         canvas.translate((rect.left+rect.right)/2f,(rect.top+rect.bottom)/2f);
         if(paintResult == null) {
