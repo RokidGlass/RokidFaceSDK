@@ -121,13 +121,21 @@ String featId = faceDbHelper.add(bm);
 * 人脸特征搜索引擎文件会储存在/sdcard/facesdk/ 目录下；
 * 人脸特征搜索引擎文件为"SearchEngine.bin"；
 * 使用人脸识别时需将这该文件拷贝至需要的设备中;
+* 调用没有参数的接口，默认支持最大数据库人脸数为10000;
 ``` java
-void save()
+void save();
 ```
+
+```java
+//maxSize表示支持最大人脸数
+void save(int maxSize);
+```
+
 
 示例代码：
 ```java
 faceDbHelper.save();
+faceDbHelper.save(int maxSize);
 ```
 #### 3.1.4 清除人脸特征库搜索引擎
 ``` java
