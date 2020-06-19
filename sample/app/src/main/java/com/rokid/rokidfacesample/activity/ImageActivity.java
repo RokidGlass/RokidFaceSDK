@@ -16,8 +16,8 @@ import android.widget.TextView;
 
 import com.rokid.facelib.ImageRokidFace;
 import com.rokid.facelib.api.IImageRokidFace;
-import com.rokid.facelib.conf.DFaceConf;
-import com.rokid.facelib.conf.SFaceConf;
+import com.rokid.facelib.conf.DetectFaceConf;
+import com.rokid.facelib.conf.RecogFaceConf;
 import com.rokid.facelib.input.BitmapInput;
 import com.rokid.facelib.model.FaceDO;
 import com.rokid.facelib.model.FaceModel;
@@ -45,8 +45,8 @@ public class ImageActivity extends Activity {
 
         faceModelView = findViewById(R.id.faceModelView);
         imageFace = ImageRokidFace.create(getBaseContext());
-        imageFace.dconfig(new DFaceConf());
-        imageFace.sconfig(new SFaceConf().setRecog(true, "/sdcard/facesdk/"));
+        imageFace.dconfig(new DetectFaceConf());
+        imageFace.sconfig(new RecogFaceConf().setRecog(true, "/sdcard/facesdk/"));
         btn_sel = findViewById(R.id.btn_sel);
         tv_text = findViewById(R.id.tv_text);
         btn_sel.setOnClickListener(new View.OnClickListener() {
@@ -81,8 +81,8 @@ public class ImageActivity extends Activity {
                     if (rect != null) {
                         sb.append("\n rect:" + rect.left + "," + rect.top + "," + rect.right + "," + rect.bottom);
                     }
-                    if(faceDO.sharpness!=0){
-                        sb.append("\n sharpness:" + faceDO.sharpness);
+                    if(faceDO.quality!=0){
+                        sb.append("\n quality:" + faceDO.quality);
                     }
                     sb.append("\n size:" + model.size());
                 }

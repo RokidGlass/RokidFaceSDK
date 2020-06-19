@@ -2,7 +2,6 @@ package com.rokid.rokidfacesample;
 
 import android.app.Application;
 
-import com.rokid.facelib.citrusfacesdk.CitrusFaceEngine;
 
 
 public class RokidFaceApplication extends Application {

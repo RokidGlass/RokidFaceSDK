@@ -17,9 +17,10 @@ import android.widget.ImageView;
 import com.rokid.camerakit.cameralibrary.view.DefaultCameraView;
 import com.rokid.facelib.VideoRokidFace;
 import com.rokid.facelib.api.IVideoRokidFace;
-import com.rokid.facelib.conf.DFaceConf;
-import com.rokid.facelib.conf.SFaceConf;
-import com.rokid.facelib.conf.VideoDFaceConf;
+import com.rokid.facelib.conf.DetectFaceConf;
+import com.rokid.facelib.conf.RecogFaceConf;
+import com.rokid.facelib.conf.VideoDetectFaceConf;
+import com.rokid.facelib.face.FaceDbHelper;
 import com.rokid.facelib.input.VideoInput;
 import com.rokid.facelib.model.FaceSize;
 import com.rokid.facelib.utils.FaceLog;
@@ -55,12 +56,13 @@ public class CameraAutoRecogActivity extends Activity {
     boolean stop;
     long crrentTime;
     Button btn_switch_recog;
-    private SFaceConf sFaceConf;
-    private DFaceConf dFaceConf;
+    private RecogFaceConf sFaceConf;
+    private DetectFaceConf dFaceConf;
     boolean recog;
     private FaceModelView faceModelView;
     private UserInfoDao userDao;
     private UserDatabase userDatabase;
+    private static final String PATH = FaceDbHelper.PATH_OUTPUT;
 
 
     @Override
@@ -92,17 +94,17 @@ public class CameraAutoRecogActivity extends Activity {
         faceModelView = findViewById(R.id.faceModelView);
         btn_switch_recog = findViewById(R.id.btn_switch_recog);
         cameraView = findViewById(R.id.cameraview);
-        sFaceConf = new SFaceConf().setRecog(false, "/sdcard/facesdk/");
+        sFaceConf = new RecogFaceConf().setRecog(false, PATH);
 
         btn_switch_recog.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 recog = !recog;
-                File file1 = new File("/sdcard/facesdk/SearchEngine.bin");
+                File file1 = new File(PATH+"SearchEngine.bin");
                 if(recog&&!file1.exists()){
                     return;
                 }
-                sFaceConf = new SFaceConf().setRecog(recog, "/sdcard/facesdk/");
+                sFaceConf = new RecogFaceConf().setRecog(recog, PATH);
                 videoFace.sconfig(sFaceConf);
                 if(!recog){
                     btn_switch_recog.setText("开启识别");
@@ -118,7 +120,7 @@ public class CameraAutoRecogActivity extends Activity {
      */
     private void faceTrackRecog() {
         //设置输入数据的宽高
-        dFaceConf = new VideoDFaceConf().setSize(PREVIEW_WIDTH, PREVIEW_HEIGHT);
+        dFaceConf = new VideoDetectFaceConf().setSize(PREVIEW_WIDTH, PREVIEW_HEIGHT);
         //设置人脸识别的区域为整个CameraPreview的区域
         dFaceConf.setRoi(new Rect(0,0,PREVIEW_WIDTH,PREVIEW_HEIGHT));
         videoFace = VideoRokidFace.create(getBaseContext(),dFaceConf);

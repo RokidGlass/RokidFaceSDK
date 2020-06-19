@@ -4,7 +4,7 @@ android {
     compileSdkVersion 28
     defaultConfig {
         applicationId "com.rokid.rokidfacesample"
-        minSdkVersion 21
+        minSdkVersion 24
         targetSdkVersion 28
         versionCode 1
         versionName "1.0"
@@ -31,7 +31,8 @@ repositories {
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation 'com.android.support:appcompat-v7:28.0.0'
-    implementation 'com.rokid.glass:facelib:3.1.2.3'
+    implementation 'com.rokid.glass:facelib:4.4.3.1'
+//    implementation 'com.rokid.citrus:citrusfacesdk:4.4'
 //    implementation (name: 'facelib-debug', ext:'aar')
     implementation 'com.rokid.glass:cameralib:1.0.0'
     implementation 'com.alibaba:fastjson:1.2.47'
