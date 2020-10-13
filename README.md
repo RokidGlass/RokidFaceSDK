@@ -1,5 +1,6 @@
 # 人脸识别离线SDK
-**Version：facelib 3.1.2.2**
+**Version：facelib 4.15.3.2**
+
 ---
 
 ## 接口使用示例demo
@@ -8,9 +9,10 @@ https://github.com/Rokid/RokidFaceSDK/tree/master/sample
 ## 一. FaceSDK介绍
 
 ### 版本号说明：
-前两位3.1表示算法版本号，后两位2.2表示sdk版本号
+前两位4.15表示算法版本号，后两位3.2表示sdk版本号
 ### 1.1 概述
 RokidFaceSDK提供基础的人脸检测+人脸跟踪+人脸识别，能够高效进行多人识别。本SDK封装底层算法接口，提供：
+
 1.图片人脸检测+图片人脸识别<br>
 2.相机预览数据人脸检测，人脸跟踪，人脸识别。<br>
 3.人脸数据库增删改查的接口<br>
@@ -31,12 +33,18 @@ allprojects {
 ```
 
 在app的build.gradle中添加依赖
+若使用该sdk的终端使用一般cpu计算平台，则：
 ```java
 dependencies {
-    implementation 'com.rokid.glass:facelib:3.1.2.2'
+    implementation 'com.rokid.glass:facelib:4.15.3.2-cpu'
 }
 ```
-
+若使用该sdk的终端使用s905d3计算平台(rokid glass二代)，则：
+```java
+dependencies {
+    implementation 'com.rokid.glass:facelib:4.15.3.2-s905d3'
+}
+```
 ### 2.2 需要如下权限
 网络权限：
 ```xml
@@ -59,20 +67,22 @@ dependencies {
 ---
 ### 3.0 人脸识别引擎初始化
 在应用的Application的onCreate方法中初始化引擎：
+
 **1. 人脸识别引擎初始化**
 
 ```java
-RokidFace.Init(Context context,boolean npuMode);
+RokidFace.Init(Context context);
 ```
 参数|含义
 ------|---------
 context | 上下文context
-npuMode | 是否切换到npu模式（注意：设备必须支持npu才能将该值设为true）
 
 ### 3.1 人脸数据库操作
 #### 3.1.1 人脸数据库初始化
 人脸数据库初始化需要下面几步操作:
+
 **1. 创建人脸数据库Helper对象**
+
 说明：数据库操作的实体类
 
 ```java
@@ -118,7 +128,6 @@ String featId = faceDbHelper.add(bm);
 
 #### 3.1.3 人脸特征搜索引擎保存到本地
 说明:
-* 人脸特征搜索引擎文件会储存在/sdcard/facesdk/ 目录下；
 * 人脸特征搜索引擎文件为"SearchEngine.bin"；
 * 使用人脸识别时需将这该文件拷贝至需要的设备中;
 ``` java
@@ -138,7 +147,7 @@ faceDbHelper.clearDb();
 #### 3.2.1 人脸检测配置参数
 **1. 设置数据源宽高**
 ``` java
-DFaceConf setSize(int width,int height)
+DetectFaceConf setSize(int width,int height)
 ```
 参数|含义
 ------|---------
@@ -149,12 +158,12 @@ height | 输入数据的高
 
 类型|含义
 ------|---------
-DFaceConf| 动态配置类
+DetectFaceConf| 人脸检测配置类 
 
-**2. 设置算法识别区域**
+**2. 设置算法检测区域**
 
 ``` java
-DFaceConf setRoi(Rect rect)
+DetectFaceConf setRoi(Rect rect)
 ```
 参数|含义
 ------|---------
@@ -164,12 +173,12 @@ rect | 输入算法检测区域
 
 类型|含义
 ------|---------
-DFaceConf| 动态配置类
+DetectFaceConf| 人脸检测配置类 
 
 
 **3. 设置同时识别最大人脸数**
 ``` java
-DFaceConf setPoolNum(int poolNum)
+DetectFaceConf setPoolNum(int poolNum)
 ```
 参数|含义
 ------|---------
@@ -179,39 +188,40 @@ poolNum | 同时识别最大人脸数
 
 类型|含义
 ------|---------
-DFaceConf| 动态配置类
+DetectFaceConf| 人脸检测配置类 
 
 **4. 设置识别的最大的人脸**
+
 ``` java
-DFaceConf setMaxSize(float faceMaxSize)
+DetectFaceConf setMaxSize(float faceMaxSize)
 ```
 参数|含义
 ------|---------
-faceMaxSize | 识别的最大的人脸size 取值(0f-1f)。例：如果相机分辨率为1280*720，那能够识别的最大人脸的像素为width：1280*faceMaxSize height:720*faceMaxSize
+faceMaxSize | 识别的最大的人脸size 取值(0f-1f)。例：如果相机分辨率为1280*720，那能够识别的最大人脸的像素为 width：1280*faceMaxSize height:720*faceMaxSize
 
 **返回:**
 
 类型|含义
 ------|---------
-DFaceConf| 动态配置类
+DetectFaceConf| 人脸检测配置类 
 
 **5.设置识别的最小的人脸**
 ``` java
-DFaceConf setMinSize(float faceMinSize)
+DetectFaceConf setMinSize(float faceMinSize)
 ```
 参数|含义
 ------|---------
-faceMinSize | 识别的最小的人脸size 取值(0f-1f)。例：如果相机分辨率为1280*720，那能够识别的最小人脸的像素为width：1280*faceMaxSize height:720*faceMaxSize
+faceMinSize | 识别的最小的人脸size 取值(0f-1f)。例：如果相机分辨率为1280*720，那能够识别的最小人脸的像素为width：1280 * faceMaxSize height:720 * faceMaxSize
 
 **返回:**
 
 类型|含义
 ------|---------
-DFaceConf| 动态配置类
+DetectFaceConf| 人脸检测配置类 
 
 **6. 设置单次detect的最大人脸数**
 ``` java
-DFaceConf setDetectMaxFace(int detectMaxFace)
+DetectFaceConf setDetectMaxFace(int detectMaxFace)
 ```
 参数|含义
 ------|---------
@@ -221,12 +231,12 @@ detectMaxFace | 单次detect能检测到的最大人脸数
 
 类型|含义
 ------|---------
-DFaceConf| 动态配置类
+DetectFaceConf| 人脸检测配置类 
 
 **7. 设置识别相关配置**
 
 ``` java
-SFaceConf setRecog（boolean recog,String dbName）
+RecogFaceConf setRecog（boolean recog,String dbName）
 ```
 参数|含义
 ------|---------
@@ -237,12 +247,12 @@ dbName| 人脸数据库文件夹路径
 
 类型|含义
 ------|---------
-SFaceConf| 静态配置类
+RecogFaceConf| 人脸识别配置类 
 
 **8. 设置识别阈值**
 
 ``` java
-SFaceConf setTargetScore(float targetScore);
+RecogFaceConf setTargetScore(float targetScore);
 ```
 参数|含义
 ------|---------
@@ -252,12 +262,12 @@ targetScore | 阈值(取值0-100)，小于阈值的识别结果将被过滤
 
 类型|含义
 ------|---------
-SFaceConf| 静态配置类
+RecogFaceConf| 人脸识别配置类 
 
 **9. 设置识别超时**
 
 ``` java
-SFaceConf setOutTime(long ms);
+RecogFaceConf setOutTime(long ms);
 ```
 参数|含义
 ------|---------
@@ -267,12 +277,12 @@ ms | 超时时间，超过该时间还没有超过阈值的识别结果，则返
 
 类型|含义
 ------|---------
-SFaceConf| 静态配置类
+RecogFaceConf| 人脸识别配置类 
 
 **10. 设置识别间隔**
 
 ``` java
-SFaceConf setRecogInterval(long ms);
+RecogFaceConf setRecogInterval(long ms);
 ```
 参数|含义
 ------|---------
@@ -282,13 +292,13 @@ ms | 识别间隔，同一张人脸两次识别的时间间隔
 
 类型|含义
 ------|---------
-SFaceConf| 静态配置类
+RecogFaceConf| 人脸识别配置类 
 示例代码：
 ```java
-DFaceConf conf = new DFaceConf();
+DetectFaceConf conf = new DetectFaceConf();
 conf.setSize(width, height); // 设置数据宽高
 conf.setRoi(rect); // 设置检测roi区域
-SFaceConf conf = new SFaceConf();
+RecogFaceConf conf = new RecogFaceConf();
 conf.setRecog(true, dbPath); //设置人脸识别搜索引擎的路径
 conf.setTargetScore(80);//设置识别阈值
 conf.setsetOutTime(2000);//设置超时时间
@@ -299,7 +309,7 @@ conf.setRecogInterval(5000);//设置识别间隔
 #### 3.3.1 人脸sdk创建
 **1. 动态参数配置**
 ``` java
-VideoRokidFace create(Context context,DFaceConf dFaceConf)
+VideoRokidFace create(Context context,DetectFaceConf dFaceConf)
 ```
 参数|含义
 ------|---------
@@ -311,7 +321,7 @@ dFaceConf| 动态配置类
 
 **2. 静态参数配置**
 ``` java
-sconfig(SFaceConf conf)
+sconfig(RecogFaceConf conf)
 ```
 参数|含义
 ------|---------
@@ -391,11 +401,11 @@ IImageRokidFace imageFace = ImageRokidFace.create(context);
 #### 3.4.2 人脸检测初始化
 说明：图片识别静态配置
 ```java
-IImageRokidFace sconfig(SFaceConf sFaceConf)
+IImageRokidFace sconfig(RecogFaceConf sFaceConf)
 ```
 参数|含义
 ------|---------
-sFaceConf | 静态配置
+sFaceConf | 人脸识别配置
 
 **返回:**
 `IImageRokidFace` 图片识别的接口
@@ -403,7 +413,7 @@ sFaceConf | 静态配置
 示例代码：
 ```java
 // 如果图片检测需要人脸识别，则sconfig
-imageFace.sconfig(new SFaceConf().setRecog(true, dbPath));
+imageFace.sconfig(new RecogFaceConf().setRecog(true, dbPath));
 ```
 #### 3.4.3 人脸检测接口
 说明：图片识别的功能实现接口
@@ -437,6 +447,7 @@ imageFace.destroy()
 FaceModel {
    int width;
    int height;
+   public byte[] data; //当前帧数据
    List<FaceDO> faces; //人脸检测数据model，包含FaceDO list
 }
 
@@ -445,15 +456,32 @@ FaceDO {
     public int trackId;  // trackId 人脸trackId，tracking中id不变
     public boolean goodQuality;//人脸质量是否合格
     public boolean goodPose;//人脸角度是否合格
-    public boolean goodSharpness;//人脸清晰度是否合格
     public float[] pose; //人脸角度
-    public float userInfoScore; //搜索引擎中搜索出的人脸相似度(取值0-100)，取值越高表示该人脸与搜索结果的相似度越高
-    public float sharpness; //人脸清晰度
+    public float userInfoScore; //搜索引擎中搜索出的人脸相似度(取值0-100)，取值越高表示该人脸与搜索结果的相似度越高。
+    public float quality; //人脸质量（取值0-100），取值越高表示该人脸的质量越高。一般该值在0-30，认为人脸质量低；该值在30-60，认为人脸质量达标，可以去做人脸识别；该值大于60，认为人脸质量非常好。
     public boolean recogOutTime;//人脸是否超时
     public float faceScore;//该帧rect与人脸的相似度(取值0-100)，取值越高表示该帧rect是人脸的概率越高，一般该值大于75，可以认为是人脸。(请与userInfoScore区分)
     public int faceAlignTime;//该人脸做faceAlign算法的次数
     public int faceRecogTime;//该人脸做faceRecog算法的次数
     public String featid;//搜索引擎中查询出来的唯一识别号
     public Bitmap recogBitmap;//算法用于识别的图片
+    public boolean qualityGoodEnough;//该人脸的quality是否已经大于60
 }
+```
+## 四.关键步骤日志
+### 4.1设置log等级
+```java
+FaceLogger.LOG_LEVEL = 0;//打印所有log
+FaceLogger.LOG_LEVEL = 1;//打印error+warn+debug的log
+FaceLogger.LOG_LEVEL = 2;//打印error+warn的log
+FaceLogger.LOG_LEVEL = 3;//打印error的log
+```
+### 4.2识别结果log
+```java
+//当识别结果分数大于阈值时，打印识别的uuid和分数
+FaceLogger.i(TAG, "------- recog result > targetScore-------- trackid:" + face.getTrackid() + " uuid:" + pairList.get(0).first + " score:" + pairList.get(0).second);
+//当识别结果分数小于阈值时，打印识别的uuid和分数
+FaceLogger.i(TAG, "------- recog result < targetScore-------- trackid:" + face.getTrackid() + " uuid:" + pairList.get(0).first + " score:" + pairList.get(0).second);
+//当次识别没有识别结果时的打印log
+FaceLogger.i(TAG, "--------------- pairList: null");
 ```
