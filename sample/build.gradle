@@ -19,9 +19,6 @@ allprojects {
     repositories {
         google()
         jcenter()
-        maven {url "https://dl.bintray.com/rokidglass/maven"}
-        maven {url "http://mvnrepo.rokid-inc.com/nexus/content/repositories/snapshots/"}
-        maven {url "http://mvnrepo.rokid-inc.com/nexus/content/repositories/releases/"}
     }
 }
 
